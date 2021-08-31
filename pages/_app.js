@@ -1,3 +1,4 @@
+import { StoreProvider } from '@/utils/Store'
 import { useEffect } from 'react'
 import '../styles/globals.css'
 
@@ -9,7 +10,11 @@ function MyApp({ Component, pageProps }) {
       jssStyles.parentElement.removeChild(jssStyles)
     }
   }, [])
-  return <Component {...pageProps} />
+  return (
+    <StoreProvider>
+      <Component {...pageProps} />
+    </StoreProvider>
+  ) 
 }
 
 export default MyApp
