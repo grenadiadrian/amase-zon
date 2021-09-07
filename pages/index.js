@@ -1,15 +1,17 @@
 import Layout from '@/components/Layout'
 import { Button, Card, CardActionArea, CardActions, CardContent, CardMedia, Grid, Typography } from '@material-ui/core'
 import NextLink from 'next/link'
-import data from '@/utils/data'
+import db from '@/utils/db'
+import Product from 'models/Product'
 
-export default function HomePage() {
+export default function HomePage(props) {
+  const { products } = props
   return (
     <Layout>
       <div>
         <h1>Products</h1>
         <Grid container spacing={3}>
-          {data.products.map(product => (
+          {products.map(product => (
             <Grid item md={4} key={product.name}>
               <Card>
                 <NextLink href={`/product/${product.slug}`} passHref>
@@ -31,4 +33,15 @@ export default function HomePage() {
       </div>
     </Layout>
   )
+}
+
+export async function getServerSideProps() {
+  await db.connect()
+  const products = await Product.find({}).lean()
+  await db.disconnect()
+  return {
+    props: {
+      products: products.map(db.convertDocToObj),
+    }
+  }
 }
