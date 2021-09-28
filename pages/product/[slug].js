@@ -1,6 +1,7 @@
 import Layout from '@/components/Layout'
 import Image from 'next/image'
 import NextLink from 'next/link'
+import { useRouter } from 'next/router'
 import { Button, Card, Grid, Link, List, ListItem, Typography } from '@material-ui/core'
 import useStyles from '@/utils/styles'
 import Product from 'models/Product'
@@ -10,6 +11,7 @@ import { useContext } from 'react'
 import { Store } from '@/utils/Store'
 
 export default function ProductScreen(props) {
+  const router = useRouter()
   const { dispatch } = useContext(Store)
   const { product } = props
   const classes = useStyles()
@@ -25,6 +27,7 @@ export default function ProductScreen(props) {
       return
     }
     dispatch({ type: 'CART_ADD_ITEM', payload: {...product, quantity: 1}})
+    router.push('/cart')
   }
 
   return (
