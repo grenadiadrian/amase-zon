@@ -1,11 +1,12 @@
 import Layout from '@/components/Layout'
+import dynamic from 'next/dynamic'
 import NextLink from 'next/link'
 import Image from 'next/image'
 import { Store } from '@/utils/Store'
 import { Button, Card, Grid, Link, List, ListItem, MenuItem, Select, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@material-ui/core'
 import { useContext } from 'react'
 
-export default function CartScreen() {
+function CartScreen() {
   const { state } = useContext(Store)
   const { cart: { cartItems } } = state
   return (
@@ -67,7 +68,7 @@ export default function CartScreen() {
               </Table>
             </TableContainer>
           </Grid>
-          <Grid md={3} xs={12}>
+          <Grid item md={3} xs={12}>
             <Card>
               <List>
                 <ListItem>
@@ -87,3 +88,5 @@ export default function CartScreen() {
     </Layout>
   )
 }
+
+export default dynamic(() => Promise.resolve(CartScreen), { ssr: false })
