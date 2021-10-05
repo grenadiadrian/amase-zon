@@ -5,16 +5,30 @@ import Image from 'next/image'
 import { Store } from '@/utils/Store'
 import { Button, Card, Grid, Link, List, ListItem, MenuItem, Select, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@material-ui/core'
 import { useContext } from 'react'
+import axios from 'axios'
 
 function CartScreen() {
-  const { state } = useContext(Store)
+  const { state, dispatch } = useContext(Store)
   const { cart: { cartItems } } = state
+  const updateCartHandler = async (item, quantity) => {
+    const { data } = await axios.get(`/api/products/${item._id}`)
+    if (data.countInStock < quantity) {
+      window.alert('Sorry, item is out of stock')
+      return
+    }
+    dispatch({ type: 'CART_ADD_ITEM', payload: { ...item, quantity }})
+  }
+  const removeItemHander = (item) => {
+    dispatch({ type: 'CART_REMOVE_ITEM', payload: item})
+  }
   return (
     <Layout title='Shopping Cart'>
       <Typography component='h1' variant='h1'>Shopping Cart</Typography>
       { cartItems.length === 0 ? (
         <div>
-          Cart is empty. <NextLink href='/'>Time to go shop!</NextLink>
+          Cart is empty. <NextLink href='/' passHref>
+            <Link>Time to go shop!</Link>
+          </NextLink>
         </div>
       ) : (
         <Grid container spacing={1}>
@@ -48,7 +62,7 @@ function CartScreen() {
                         </NextLink>
                       </TableCell>
                       <TableCell align='right'>
-                        <Select value={item.quantity}>
+                        <Select value={item.quantity} onChange={e => updateCartHandler(item, e.target.value)}>
                           {[...Array(item.countInStock).keys()].map(x => (
                             <MenuItem key={x + 1} value={x + 1}>
                               {x + 1}
@@ -60,7 +74,7 @@ function CartScreen() {
                         ${item.price}
                       </TableCell>
                       <TableCell align='right'>
-                        <Button variant='contained' color='secondary'>x</Button>
+                        <Button variant='contained' color='secondary' onClick={() => removeItemHander(item)}>x</Button>
                       </TableCell>
                     </TableRow>
                   ))}
@@ -74,7 +88,7 @@ function CartScreen() {
                 <ListItem>
                   <Typography variant='h2'>
                     Subtotal ({cartItems.reduce((a, c) => a + c.quantity, 0)}{' '} items)
-                    : $ {cartItems.reduce((a, c) => a + c.quantity * c.price, 0)}
+                    : ${cartItems.reduce((a, c) => a + c.quantity * c.price, 0)}
                   </Typography>
                 </ListItem>
                 <ListItem>
