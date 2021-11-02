@@ -1,11 +1,15 @@
+import { Store } from "@/utils/Store"
 import {useRouter} from "next/router"
+import { useContext } from "react"
 
 export default function ShippingScreen() {
   const router = useRouter()
-  router.push('/login')
+  const { state, dispatch } = useContext(Store)
+  const { userInfo } = state
+  if (!userInfo) {
+    router.push('/login?redirect=/shipping')
+  }
   return (
-    <div>
-      
-    </div>
-  )
+    <div>Shipping Page</div>
+)
 }
