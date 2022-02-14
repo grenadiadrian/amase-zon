@@ -9,6 +9,7 @@ import { Store } from "@/utils/Store";
 import Cookies from "js-cookie";
 import { Controller, useForm } from "react-hook-form";
 import { useSnackbar } from "notistack";
+import { getError } from "@/utils/error";
 
 export default function LoginScreen() {
   const { handleSubmit, control, formState: { errors }} = useForm()
@@ -31,7 +32,7 @@ export default function LoginScreen() {
       Cookies.set('userInfo', JSON.stringify(data))
       router.push(redirect || '/')      
     } catch (err) {
-      enqueueSnackbar(err.response.data ? err.response.data.message : err.message, {variant: 'error'})
+      enqueueSnackbar(getError(err), {variant: 'error'})
     }
   }
   return (
