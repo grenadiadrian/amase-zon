@@ -69,6 +69,11 @@ function AdminDashboardScreen() {
                   <ListItemText primary='Products'></ListItemText>
                 </ListItem>
               </NextLink>
+              <NextLink href='/admin/users' passHref>
+                <ListItem button component='a'>
+                  <ListItemText primary='Users'></ListItemText>
+                </ListItem>
+              </NextLink>
             </List>
           </Card>
         </Grid>
