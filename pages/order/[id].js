@@ -4,7 +4,7 @@ import NextLink from 'next/link'
 import Image from 'next/image'
 import { Store } from '@/utils/Store'
 import { Button, Card, CircularProgress, Grid, Link, List, ListItem, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@material-ui/core'
-import { useContext, useEffect, useState, useReducer } from 'react'
+import { useContext, useEffect, useReducer } from 'react'
 import axios from 'axios'
 import { useRouter } from 'next/router'
 import useStyles from '@/utils/styles'
@@ -101,7 +101,7 @@ function OrderScreen({ params }) {
     }
   }, [order, successPay, successDeliver])
 
-  const { closeSnackbar, enqueueSnackbar } = useSnackbar()
+  const { enqueueSnackbar } = useSnackbar()
 
   function createOrder(data, actions) {
     return actions.order.create({
