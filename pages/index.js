@@ -7,6 +7,7 @@ import axios from 'axios'
 import { useRouter } from 'next/router'
 import { useContext } from 'react'
 import { Store } from '@/utils/Store'
+import { Rating } from '@material-ui/lab'
 
 export default function HomePage(props) {
   const router = useRouter()
@@ -36,6 +37,7 @@ export default function HomePage(props) {
                     <CardMedia component='img' image={product.image} title={product.name} />
                     <CardContent>
                       <Typography>{product.name}</Typography>
+                      <Rating value={product.rating} readOnly />
                     </CardContent>
                   </CardActionArea>
                 </NextLink>
@@ -54,7 +56,7 @@ export default function HomePage(props) {
 
 export async function getServerSideProps() {
   await db.connect()
-  const products = await Product.find({}).lean()
+  const products = await Product.find({}, '-reviews').lean()
   await db.disconnect()
   return {
     props: {
