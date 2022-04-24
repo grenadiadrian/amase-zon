@@ -1,6 +1,7 @@
-import { AppBar, Container, createTheme, CssBaseline, Link, Switch, Badge, ThemeProvider, Toolbar, Typography, Button, Menu, MenuItem, Box, IconButton, Drawer, ListItem, List, Divider, ListItemText } from '@material-ui/core'
+import { AppBar, Container, createTheme, CssBaseline, Link, Switch, Badge, ThemeProvider, Toolbar, Typography, Button, Menu, MenuItem, Box, IconButton, Drawer, ListItem, List, Divider, ListItemText, InputBase } from '@material-ui/core'
 import MenuIcon from '@material-ui/icons/Menu'
 import CancelIcon from '@material-ui/icons/Cancel'
+import SearchIcon from '@material-ui/icons/Search'
 import useStyles from '@/utils/styles'
 import Head from 'next/head'
 import NextLink from 'next/link'
@@ -65,6 +66,18 @@ export default function Layout({ title, description, children }) {
     fetchCategories()
   }, [])
 
+  const [query, setQuery] = useState('')
+
+  const queryChangeHandler = (e) => {
+    setQuery(e.target.value)
+  }
+
+  const submitHandler = (e) => {
+    e.preventDefault()
+    router.push(`/search?query=${query}`)
+
+  }
+
   const darkModeChangeHandler = () => {
     dispatch({ type: darkMode ? 'DARK_MODE_OFF' : 'DARK_MODE_ON'})
     const newDarkMode = !darkMode
@@ -99,7 +112,7 @@ export default function Layout({ title, description, children }) {
         <AppBar position='static' className={classes.navbar}>
           <Toolbar className={classes.toolbar}>
           <Box display='flex' alignItems='center'>
-            <IconButton edge='start' aria-label='open-drawer' onClick={sidebarOpenHandler}>
+            <IconButton edge='start' aria-label='open-drawer' onClick={sidebarOpenHandler} className={classes.menuButton}>
               <MenuIcon className={classes.navbarButton} />
             </IconButton>
             <NextLink href='/' passHref>
@@ -128,7 +141,13 @@ export default function Layout({ title, description, children }) {
               ))}
             </List>
           </Drawer>            
-            <div className={classes.grow}></div>
+            <div className={classes.searchSection}></div>
+            <form onSubmit={submitHandler} className={classes.searchForm}>
+              <InputBase name='query' className={classes.searchInput} placeholder='Search Products' onChange={queryChangeHandler} />
+              <IconButton type='submit' className={classes.iconButton} aria-label='search'>
+                <SearchIcon />
+              </IconButton>
+            </form>
             <div>
               <Switch checked={darkMode} onChange={darkModeChangeHandler}></Switch>
               <NextLink href='/cart' passHref>
