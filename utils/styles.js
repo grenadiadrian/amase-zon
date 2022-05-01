@@ -60,6 +60,7 @@ const useStyles = makeStyles((theme) => ({
   menuButton: {
     padding: 0
   },
+  mt1: { marginTop: '1rem' },
   // search
   searchSection: {
     display: 'none',
@@ -86,6 +87,9 @@ const useStyles = makeStyles((theme) => ({
     '& span': {
       color: '#000000',
     }
+  },
+  sort: {
+    marginRight: 5,
   }
 }))
 
